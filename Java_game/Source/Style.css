@@ -1,0 +1,31 @@
+/* Default START button */
+.menu-button {
+    -fx-background-image: url("start_normal.png");
+    -fx-background-size: cover;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+}
+
+/* Hover effect for START */
+.menu-button:hover {
+    -fx-background-image: url("start_hover.png");
+}
+
+/* Default EXIT button */
+.menu-button-exit {
+    -fx-background-image: url("exit_normal.png");
+    -fx-background-size: cover;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+}
+
+/* Hover EXIT */
+.menu-button-exit:hover {
+    -fx-background-image: url("exit_hover.png");
+}
