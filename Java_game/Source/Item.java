@@ -10,7 +10,7 @@ public class Item extends Object {
 	
 	//Loading texture
 	static final Image[] texture = {
-		new Image("file:D:/Java_game/Assets/Item/0.png")
+		new Image("Assets/Item/0.png")
 	};
 	
 	public Item(double x, double y, int type) {

@@ -9,7 +9,7 @@ public class Ball extends Object {
     double dx, dy;
 	
 	//Loading texture
-	static final Image texture=new Image("file:D:/Java_game/Assets/Ball/0.png");
+	static final Image texture=new Image(Ball.class.getResource("/Source/Assets/Ball/0.png").toExternalForm());
     // AABB collision
     public boolean AABBCheck(Brick brick) {
         return (this.x + BALL_SIZE > brick.x &&

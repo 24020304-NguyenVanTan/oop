@@ -45,14 +45,4 @@ public class Controller implements Initializable {
     public void onExitClick() {
         System.exit(0);
     }
-
-    @FXML
-    public void onButtonHover() {
-        startButton.setStyle("-fx-background-color: #3cb371; -fx-text-fill: white;");
-    }
-
-    @FXML
-    public void onButtonExit() {
-        startButton.setStyle("-fx-background-color: #2e8b57; -fx-text-fill: white;");
-    }
 }

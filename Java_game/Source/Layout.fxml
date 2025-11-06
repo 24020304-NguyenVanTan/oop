@@ -7,39 +7,27 @@
 <AnchorPane fx:controller="Source.Controller"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@Style.css"
             prefWidth="1920.0" prefHeight="1080.0"
+			style="-fx-background-color: black;"
             fx:id="rootPane">
 
-
+    <!-- UI Layer -->
     <Pane fx:id="uiPane" prefWidth="1920" prefHeight="1080">
 
+        <!-- Start Button (Image Only) -->
         <Button fx:id="startButton"
-                text="New Game"
-                prefWidth="300" prefHeight="80"
                 layoutX="810" layoutY="400"
-                onAction="#onStartClick"
-                onMouseEntered="#onButtonHover"
-                onMouseExited="#onButtonExit"
-                style="
-                    -fx-font-size: 28px;
-                    -fx-background-color: #2e8b57;
-                    -fx-text-fill: white;
-                    -fx-font-weight: bold;
-                    -fx-background-radius: 12;
-                "/>
-
-        <Button fx:id="exitButton"
-                text="Quit"
                 prefWidth="300" prefHeight="80"
+                styleClass="start-btn"
+                onAction="#onStartClick"/>
+
+        <!-- Exit Button (Image Only) -->
+        <Button fx:id="exitButton"
                 layoutX="810" layoutY="520"
-                onAction="#onExitClick"
-                style="
-                    -fx-font-size: 28px;
-                    -fx-background-color: #2e8b57;
-                    -fx-text-fill: white;
-                    -fx-font-weight: bold;
-                    -fx-background-radius: 12;
-                "/>
+                prefWidth="300" prefHeight="80"
+                styleClass="exit-btn"
+                onAction="#onExitClick"/>
 
     </Pane>
 </AnchorPane>

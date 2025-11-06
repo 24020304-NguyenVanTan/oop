@@ -53,7 +53,6 @@ public class GameEngine extends Application {
         Controller controller = loader.getController();
 
         menuScene = new Scene(menuRoot);
-
         stage.setTitle("Arkanoid Clone - JavaFX");
         stage.setFullScreen(true);
 		stage.setFullScreenExitKeyCombination(javafx.scene.input.KeyCombination.NO_MATCH);
@@ -123,7 +122,7 @@ public class GameEngine extends Application {
         ball.dx = 5;
         ball.dy = -5;
 
-        loadLevel("D://Java_game//Levels//0.txt");
+        loadLevel("/Source/Assets/Levels/0.txt");
     }
 
     private void update(double delta) {
@@ -158,27 +157,31 @@ public class GameEngine extends Application {
         }
     }
 
-    public void loadLevel(String filePath) {
-        bricks.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty() || line.startsWith("#")) continue;
+	public void loadLevel(String resourcePath) {
+		bricks.clear();
 
-                String[] parts = line.split("\\s+");
-                if (parts.length < 3) continue;
+		try (InputStream is = getClass().getResourceAsStream(resourcePath);
+			 BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
 
-                int x = Integer.parseInt(parts[0]);
-                int y = Integer.parseInt(parts[1]);
-                int type = Integer.parseInt(parts[2]);
+			String line;
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+				if (line.isEmpty() || line.startsWith("#")) continue;
 
-                bricks.add(new Brick(type, x * Brick.w, y * Brick.h));
-            }
-        } catch (IOException e) {
-            System.err.println("Failed to load level: " + e.getMessage());
-        }
-    }
+				String[] parts = line.split("\\s+");
+				if (parts.length < 3) continue;
+
+				int x = Integer.parseInt(parts[0]);
+				int y = Integer.parseInt(parts[1]);
+				int type = Integer.parseInt(parts[2]);
+
+				bricks.add(new Brick(type, x * Brick.w, y * Brick.h));
+			}
+
+		} catch (Exception e) {
+			System.err.println("Failed to load level: " + e.getMessage());
+		}
+	}
 
     public static void main(String[] args) {
         launch(args);

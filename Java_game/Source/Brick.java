@@ -9,18 +9,22 @@ class Brick extends Object{
 	final static int h=80;
 	
 	//Loading texture
-	static final Image[][] texture = {
-		{},
-		{null, new Image("file:D:/Java_game/Assets/Brick/1-1.png")},
-		{null, new Image("file:D:/Java_game/Assets/Brick/2-1.png"),
-		new Image("file:D:/Java_game/Assets/Brick/2-2.png")},
-		{null, new Image("file:D:/Java_game/Assets/Brick/3-1.png"),
-		new Image("file:D:/Java_game/Assets/Brick/3-2.png"),
-		new Image("file:D:/Java_game/Assets/Brick/3-3.png"),
-		new Image("file:D:/Java_game/Assets/Brick/3-4.png"),
-		new Image("file:D:/Java_game/Assets/Brick/3-5.png")},
-		{null, new Image("file:D:/Java_game/Assets/Brick/4-1.png")}
-	};
+    static final Image[][] texture = {
+            {}, // 0: unused
+            { null, load("Source/Assets/Brick/1-1.png") },
+            { null, load("Source/Assets/Brick/2-1.png"),
+                    load("Source/Assets/Brick/2-2.png") },
+            { null, load("Source/Assets/Brick/3-1.png"),
+                    load("Source/Assets/Brick/3-2.png"),
+                    load("Source/Assets/Brick/3-3.png"),
+                    load("Source/Assets/Brick/3-4.png"),
+                    load("Source/Assets/Brick/3-5.png") },
+            { null, load("Source/Assets/Brick/4-1.png") }
+    };
+
+    private static Image load(String path) {
+        return new Image(Brick.class.getResource("/" + path).toExternalForm());
+    }
 		
 	public Brick(int type, int x, int y){
 		this.type=type;
@@ -61,6 +65,7 @@ class Brick extends Object{
 		return;
 	}
 	public void render(GraphicsContext gc, double scale){
+		if(hp<=0) return;
 		gc.drawImage(texture[this.type][this.hp], (x+RENDER_OFFSET) * scale, y * scale, w * scale, h * scale);
 		return;
 	}
