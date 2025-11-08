@@ -1,7 +1,7 @@
 package Source;
 
-import javafx.fxml.*;
 import javafx.application.*;
+import javafx.fxml.*;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.canvas.*;
@@ -10,16 +10,22 @@ import javafx.animation.*;
 import javafx.scene.input.*;
 import javafx.scene.paint.*;
 import javafx.geometry.*;
-import java.util.*;
+
 import java.io.*;
+import java.util.*;
 
 public class GameEngine extends Application {
+
     // Simulation size
     public static final int SIM_W = 1560;
     public static final int SIM_H = 1080;
 
     // Game states
-    static int GAME_STATE = 0; // 0 = menu, 1 = playing, 2 = win, 3 = lose
+    public static final int STATE_MENU = 0;
+    public static final int STATE_PLAYING = 1;
+    public static final int STATE_PAUSED = 2;
+
+    int GAME_STATE = STATE_MENU;
 
     // Game objects
     Paddle paddle;
@@ -32,59 +38,68 @@ public class GameEngine extends Application {
     private double mouseX;
     private boolean mousePressed = false;
 
-    // Canvas + scene
+    // Canvas + graphics
     private double screenW, screenH;
-    private Canvas canvas;
     private GraphicsContext gc;
+    private double scale;
+
+    // References
     private Stage stage;
-    private Scene gameScene;
-    private Scene menuScene;
+    private Controller controller;
 
     @Override
     public void start(Stage stage) throws Exception {
-		Object.engine=this;
-		Controller.engine=this;
+        Object.engine = this;
+        Controller.engine = this;
         this.stage = stage;
-        // --- Load FXML (Menu) ---
+
+        // --- Load FXML ---
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Source/Layout.fxml"));
-        Parent menuRoot = loader.load();
+        Parent root = loader.load();
+        controller = loader.getController();
 
-        // Link controller
-        Controller controller = loader.getController();
-
-        menuScene = new Scene(menuRoot);
+        // --- Stage setup ---
         stage.setTitle("Arkanoid Clone - JavaFX");
         stage.setFullScreen(true);
-		stage.setFullScreenExitKeyCombination(javafx.scene.input.KeyCombination.NO_MATCH);
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setFullScreenExitHint("");
-        stage.setScene(menuScene);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
         stage.show();
+		Platform.runLater(() -> {controller.rootPane.requestFocus();});
 
-        // --- Screen setup for game ---
+        // --- Setup canvas & scaling ---
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         screenW = screenBounds.getWidth();
         screenH = screenBounds.getHeight();
+        scale = screenH / SIM_H;
 
-        double scale = screenH / SIM_H;
-        canvas = new Canvas(screenW, screenH);
+        Canvas canvas = controller.gameCanvas;
+        canvas.setWidth(screenW);
+        canvas.setHeight(screenH);
         gc = canvas.getGraphicsContext2D();
 
-        Pane gameRoot = new Pane(canvas);
-        gameScene = new Scene(gameRoot);
+        // --- Input handling ---
+        root.setOnMouseMoved(e -> mouseX = e.getX());
+        root.setOnMouseDragged(e -> mouseX = e.getX());
+        root.setOnMousePressed(e -> mousePressed = true);
+        root.setOnMouseReleased(e -> mousePressed = false);
 
-        // Input handling
-        gameScene.setOnKeyPressed(e -> pressedKeys.add(e.getCode()));
-        gameScene.setOnKeyReleased(e -> pressedKeys.remove(e.getCode()));
+        scene.setOnKeyPressed(e -> {
+		pressedKeys.add(e.getCode());
+			// handle immediate keys (toggle pause etc)
+			if (e.getCode() == KeyCode.ESCAPE) {
+				if (GAME_STATE == 1) pauseGame();
+				else if (GAME_STATE == 2) resumeGame();
+			}
+		});
+		scene.setOnKeyReleased(e -> {pressedKeys.remove(e.getCode());
+		});
 
-        gameScene.setOnMouseMoved(e -> mouseX = e.getX());
-        gameScene.setOnMouseDragged(e -> mouseX = e.getX());
-        gameScene.setOnMousePressed(e -> mousePressed = true);
-        gameScene.setOnMouseReleased(e -> mousePressed = false);
-
-        // Initialize game data
+        // --- Initialize game ---
         initGame();
 
-        // Game loop
+        // --- Game loop ---
         new AnimationTimer() {
             long last = 0;
             @Override
@@ -96,20 +111,47 @@ public class GameEngine extends Application {
                 double deltaTime = (now - last) / 1e9;
                 last = now;
                 update(deltaTime);
-                render(scale);
+                render();
             }
         }.start();
     }
 
+    /** Called when Start button pressed */
     public void startGame() {
-        GAME_STATE = 1;
-        stage.setScene(gameScene);
-		stage.setFullScreen(true);
+        GAME_STATE = STATE_PLAYING;
+        controller.mainMenu.setVisible(false);
+        controller.overlay.setVisible(false);
+        controller.pauseMenu.setVisible(false);
+        controller.gameCanvas.setVisible(true);
     }
-	
-	public void quitGame() {
-		Platform.exit();
-	}
+
+    /** Called when Quit button pressed */
+    public void quitGame() {
+        Platform.exit();
+    }
+
+    /** Called on ESC -> pause */
+    public void pauseGame() {
+        GAME_STATE = STATE_PAUSED;
+        controller.overlay.setVisible(true);
+        controller.pauseMenu.setVisible(true);
+    }
+
+    /** Called on Continue -> resume */
+    public void resumeGame() {
+        GAME_STATE = STATE_PLAYING;
+        controller.overlay.setVisible(false);
+        controller.pauseMenu.setVisible(false);
+    }
+
+    /** Called on "Back to Menu" from pause menu */
+    public void returnToMenu() {
+        GAME_STATE = STATE_MENU;
+        controller.mainMenu.setVisible(true);
+        controller.pauseMenu.setVisible(false);
+        controller.overlay.setVisible(false);
+        controller.gameCanvas.setVisible(false);
+    }
 
     private void initGame() {
         paddle = new Paddle();
@@ -126,13 +168,13 @@ public class GameEngine extends Application {
     }
 
     private void update(double delta) {
-        if (GAME_STATE != 1) return;
+        if (GAME_STATE != STATE_PLAYING) return;
 
         if (pressedKeys.contains(KeyCode.LEFT)) paddle.moveleft();
         if (pressedKeys.contains(KeyCode.RIGHT)) paddle.moveright();
 
         if (mousePressed) {
-            paddle.move((int) (mouseX / (canvas.getWidth() / SIM_W)));
+            paddle.move((int) (mouseX / (controller.gameCanvas.getWidth() / SIM_W)));
         }
 
         ball.update();
@@ -140,8 +182,8 @@ public class GameEngine extends Application {
         items.removeIf(i -> i.y >= SIM_H);
     }
 
-    private void render(double scale) {
-        if (GAME_STATE != 1) return;
+    private void render() {
+        if (GAME_STATE != STATE_PLAYING) return;
 
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, screenW, screenH);
@@ -151,37 +193,37 @@ public class GameEngine extends Application {
         paddle.render(gc, scale);
         ball.render(gc, scale);
 
-        if (GAME_STATE == 3) {
-            gc.setFill(Color.RED);
-            gc.fillText("You Lose!", 500, 500);
+        // side bars
+        gc.fillRect(0, 0, 180 * scale, 1080 * scale);
+        gc.fillRect((1920 - 180) * scale, 0, 180 * scale, 1080 * scale);
+    }
+	
+	//Working fine as is
+    public void loadLevel(String resourcePath) {
+        bricks.clear();
+
+        try (InputStream is = getClass().getResourceAsStream(resourcePath);
+             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) continue;
+
+                String[] parts = line.split("\\s+");
+                if (parts.length < 3) continue;
+
+                int x = Integer.parseInt(parts[0]);
+                int y = Integer.parseInt(parts[1]);
+                int type = Integer.parseInt(parts[2]);
+
+                bricks.add(new Brick(type, x * Brick.w, y * Brick.h));
+            }
+
+        } catch (Exception e) {
+            System.err.println("Failed to load level: " + e.getMessage());
         }
     }
-
-	public void loadLevel(String resourcePath) {
-		bricks.clear();
-
-		try (InputStream is = getClass().getResourceAsStream(resourcePath);
-			 BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-
-			String line;
-			while ((line = br.readLine()) != null) {
-				line = line.trim();
-				if (line.isEmpty() || line.startsWith("#")) continue;
-
-				String[] parts = line.split("\\s+");
-				if (parts.length < 3) continue;
-
-				int x = Integer.parseInt(parts[0]);
-				int y = Integer.parseInt(parts[1]);
-				int type = Integer.parseInt(parts[2]);
-
-				bricks.add(new Brick(type, x * Brick.w, y * Brick.h));
-			}
-
-		} catch (Exception e) {
-			System.err.println("Failed to load level: " + e.getMessage());
-		}
-	}
 
     public static void main(String[] args) {
         launch(args);

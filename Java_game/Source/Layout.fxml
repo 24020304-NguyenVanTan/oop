@@ -1,33 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
 <AnchorPane fx:controller="Source.Controller"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            stylesheets="@Style.css"
+            fx:id="rootPane"
             prefWidth="1920.0" prefHeight="1080.0"
-			style="-fx-background-color: black;"
-            fx:id="rootPane">
+            stylesheets="@Style.css">
 
-    <!-- UI Layer -->
-    <Pane fx:id="uiPane" prefWidth="1920" prefHeight="1080">
+    <!-- Main UI Pane (1920×1080 design space) -->
+    <Pane fx:id="scalePane" prefWidth="1920.0" prefHeight="1080.0">
 
-        <!-- Start Button (Image Only) -->
-        <Button fx:id="startButton"
-                layoutX="810" layoutY="400"
-                prefWidth="300" prefHeight="80"
-                styleClass="start-btn"
-                onAction="#onStartClick"/>
+        <!-- Game Canvas (where gameplay is rendered) -->
+        <Canvas fx:id="gameCanvas"
+                width="1920.0" height="1080.0"
+                visible="false" />
 
-        <!-- Exit Button (Image Only) -->
-        <Button fx:id="exitButton"
-                layoutX="810" layoutY="520"
-                prefWidth="300" prefHeight="80"
-                styleClass="exit-btn"
-                onAction="#onExitClick"/>
+        <!-- ========== MAIN MENU ========== -->
+        <VBox fx:id="mainMenu"
+              alignment="CENTER" spacing="20"
+              layoutX="660" layoutY="360"
+              prefWidth="600" prefHeight="360"
+              visible="true">
+
+            <Button fx:id="startButton"
+                    onAction="#onStartClicked"
+                    prefWidth="300" prefHeight="80" />
+
+            <Button fx:id="quitButton"
+                    onAction="#onQuitClicked"
+                    prefWidth="300" prefHeight="80" />
+        </VBox>
+
+        <!-- ========== DARK OVERLAY (used when paused) ========== -->
+        <Rectangle fx:id="overlay"
+                   layoutX="0" layoutY="0"
+                   width="1920.0" height="1080.0"
+                   visible="false" />
+
+        <!-- ========== PAUSE MENU ========== -->
+        <VBox fx:id="pauseMenu"
+              alignment="CENTER" spacing="20"
+              layoutX="750" layoutY="410"
+              prefWidth="420" prefHeight="260"
+              visible="false">
+
+            <Button fx:id="continueButton"
+                    onAction="#onContinueClicked"
+                    prefWidth="300" prefHeight="80" />
+
+            <Button fx:id="backToMenuButton"
+                    onAction="#onBackToMenuClicked"
+                    prefWidth="300" prefHeight="80" />
+        </VBox>
 
     </Pane>
 </AnchorPane>

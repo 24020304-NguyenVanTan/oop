@@ -1,24 +1,60 @@
+/* Make root black */
+#rootPane {
+    -fx-background-color: black;
+}
+
+/* Hide button borders */
 .button {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
     -fx-padding: 0;
     -fx-border-width: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }
 
-/* Start (New Game) Button */
-.start-btn {
-    -fx-background-image: url("/Source/Assets/Buttons/Start_0.png");
+/* Main menu buttons */
+#startButton {
+    -fx-background-image: url("Assets/Buttons/Start_0.png");
     -fx-background-size: cover;
 }
-.start-btn:hover {
-    -fx-background-image: url("/Source/Assets/Buttons/Start_1.png");
+#startButton:hover {
+    -fx-background-image: url("Assets/Buttons/Start_1.png");
 }
 
-/* Exit Button */
-.exit-btn {
-    -fx-background-image: url("/Source/Assets/Buttons/Start_0.png");
+#quitButton {
+    -fx-background-image: url("Assets/Buttons/Start_0.png");
     -fx-background-size: cover;
 }
-.exit-btn:hover {
-    -fx-background-image: url("/Source/Assets/Buttons/Start_1.png");
+#quitButton:hover {
+    -fx-background-image: url("Assets/Buttons/Start_1.png");
+}
+
+/* Pause menu background */
+#pauseMenu {
+    -fx-background-image: url("Assets/PauseBackground.png");
+    -fx-background-size: cover;
+}
+
+/* Pause menu buttons */
+#continueButton {
+    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-size: cover;
+}
+#continueButton:hover {
+    -fx-background-image: url("Assets/Buttons/Start_1.png");
+}
+
+#backToMenuButton {
+    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-size: cover;
+}
+#backToMenuButton:hover {
+    -fx-background-image: url("Assets/Buttons/Start_1.png");
+}
+
+/* Dark overlay while paused */
+#overlay {
+    -fx-fill: black;
+    -fx-opacity: 0.5;
 }

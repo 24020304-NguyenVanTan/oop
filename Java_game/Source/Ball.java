@@ -43,20 +43,17 @@ public class Ball extends Object {
 
         // Paddle collision
 		Paddle p =engine.paddle;
-        if (this.x + BALL_SIZE > p.x && this.x < p.x + p.w &&
-            this.y + BALL_SIZE > p.y && this.y < p.y + p.h) {
-
-            //double ballCenter = this.x + BALL_SIZE / 2.0;
-            //double paddleCenter = p.x + p.w / 2.0;
-
-            // Normalized offset (-1 to 1)
-            //double offset = ((this.x + BALL_SIZE / 2.0) - (p.x + p.w / 2.0)) / (p.w / 2.0);
-            double angle = Math.toRadians(60) * ((this.x + BALL_SIZE / 2.0 - p.x - p.w / 2.0) / (p.w / 2.0)); // max 60 degrees
-
-            // Recalculate velocity
-            this.dx = speed * Math.sin(angle);
-            this.dy = -speed * Math.cos(angle);
-            return;
+        if (this.x + BALL_SIZE > p.x && this.x < p.x + p.w &&this.y + BALL_SIZE > p.y && this.y < p.y + p.h) {
+			if(Math.min(this.x + BALL_SIZE, p.x + p.w) - Math.max(this.x, p.x) > Math.min(this.y + BALL_SIZE, p.y + p.h) - Math.max(this.y, p.y)) {
+				double angle = Math.toRadians(60) * ((this.x + BALL_SIZE / 2.0 - p.x - p.w / 2.0) / (p.w / 2.0)); // max 60 degrees
+				// Recalculate velocity
+				this.dx = speed * Math.sin(angle);
+				this.dy = -speed * Math.cos(angle);
+			}
+			else{
+				this.dx*=-1;
+			}
+			return;
         }
 
         // Brick collision detection
