@@ -20,12 +20,9 @@ public class GameEngine extends Application {
     public static final int SIM_W = 1560;
     public static final int SIM_H = 1080;
 
-    // Game states
-    public static final int STATE_MENU = 0;
-    public static final int STATE_PLAYING = 1;
-    public static final int STATE_PAUSED = 2;
+	int level = 0;
 
-    int GAME_STATE = STATE_MENU;
+    int GAME_STATE = 0;
 
     // Game objects
     Paddle paddle;
@@ -85,12 +82,18 @@ public class GameEngine extends Application {
         root.setOnMousePressed(e -> mousePressed = true);
         root.setOnMouseReleased(e -> mousePressed = false);
 
-        scene.setOnKeyPressed(e -> {
+       scene.setOnKeyPressed(e -> {
 		pressedKeys.add(e.getCode());
 			// handle immediate keys (toggle pause etc)
 			if (e.getCode() == KeyCode.ESCAPE) {
-				if (GAME_STATE == 1) pauseGame();
-				else if (GAME_STATE == 2) resumeGame();
+				if (GAME_STATE == 1){
+					GAME_STATE=2;
+					controller.overlay.setVisible(true);
+					controller.pauseMenu.setVisible(true);
+				}
+				else if (GAME_STATE == 2){
+					controller.onContinueClicked();
+				}
 			}
 		});
 		scene.setOnKeyReleased(e -> {pressedKeys.remove(e.getCode());
@@ -116,41 +119,12 @@ public class GameEngine extends Application {
         }.start();
     }
 
-    /** Called when Start button pressed */
-    public void startGame() {
-        GAME_STATE = STATE_PLAYING;
-        controller.mainMenu.setVisible(false);
-        controller.overlay.setVisible(false);
-        controller.pauseMenu.setVisible(false);
-        controller.gameCanvas.setVisible(true);
-    }
-
-    /** Called when Quit button pressed */
-    public void quitGame() {
-        Platform.exit();
-    }
 
     /** Called on ESC -> pause */
     public void pauseGame() {
-        GAME_STATE = STATE_PAUSED;
+        GAME_STATE = 2;
         controller.overlay.setVisible(true);
         controller.pauseMenu.setVisible(true);
-    }
-
-    /** Called on Continue -> resume */
-    public void resumeGame() {
-        GAME_STATE = STATE_PLAYING;
-        controller.overlay.setVisible(false);
-        controller.pauseMenu.setVisible(false);
-    }
-
-    /** Called on "Back to Menu" from pause menu */
-    public void returnToMenu() {
-        GAME_STATE = STATE_MENU;
-        controller.mainMenu.setVisible(true);
-        controller.pauseMenu.setVisible(false);
-        controller.overlay.setVisible(false);
-        controller.gameCanvas.setVisible(false);
     }
 
     private void initGame() {
@@ -163,12 +137,11 @@ public class GameEngine extends Application {
         ball.y = SIM_H / 2;
         ball.dx = 5;
         ball.dy = -5;
-
-        loadLevel("/Source/Assets/Levels/0.txt");
+        loadLevel("/Source/Assets/Levels/"+level+".txt");
     }
 
     private void update(double delta) {
-        if (GAME_STATE != STATE_PLAYING) return;
+        if (GAME_STATE != 1) return;
 
         if (pressedKeys.contains(KeyCode.LEFT)) paddle.moveleft();
         if (pressedKeys.contains(KeyCode.RIGHT)) paddle.moveright();
@@ -183,7 +156,7 @@ public class GameEngine extends Application {
     }
 
     private void render() {
-        if (GAME_STATE != STATE_PLAYING) return;
+        if (GAME_STATE != 1) return;
 
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, screenW, screenH);
@@ -224,6 +197,16 @@ public class GameEngine extends Application {
             System.err.println("Failed to load level: " + e.getMessage());
         }
     }
+	public void resetGame(){
+		GAME_STATE=1;
+		level = 0;
+	}
+	
+	public void onLose() {
+		GAME_STATE=3;
+		controller.overlay.setVisible(true);
+		controller.loseMenu.setVisible(true);
+	}
 
     public static void main(String[] args) {
         launch(args);

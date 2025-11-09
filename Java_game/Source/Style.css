@@ -1,6 +1,6 @@
 /* Make root black */
 #rootPane {
-    -fx-background-color: black;
+    -fx-background-color: rgba(0, 0, 0, 1);
 }
 
 /* Hide button borders */
@@ -50,6 +50,22 @@
     -fx-background-size: cover;
 }
 #backToMenuButton:hover {
+    -fx-background-image: url("Assets/Buttons/Start_1.png");
+}
+/*Lose Menu*/
+#restartButton {
+    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-size: cover;
+}
+#restartButton:hover {
+    -fx-background-image: url("Assets/Buttons/Start_1.png");
+}
+
+#backToMenuButton1 {
+    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-size: cover;
+}
+#backToMenuButton1:hover {
     -fx-background-image: url("Assets/Buttons/Start_1.png");
 }
 

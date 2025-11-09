@@ -38,7 +38,7 @@
                     prefWidth="300" prefHeight="80" />
         </VBox>
 
-        <!-- ========== DARK OVERLAY (used when paused) ========== -->
+        <!-- ========== DARK OVERLAY (laid over gameCanvas when paused) ========== -->
         <Rectangle fx:id="overlay"
                    layoutX="0" layoutY="0"
                    width="1920.0" height="1080.0"
@@ -56,6 +56,54 @@
                     prefWidth="300" prefHeight="80" />
 
             <Button fx:id="backToMenuButton"
+                    onAction="#onBackToMenuClicked"
+                    prefWidth="300" prefHeight="80" />
+        </VBox>
+		
+		<!-- =============LOSE MENU============= -->
+		<VBox fx:id="loseMenu"
+              alignment="CENTER" spacing="20"
+              layoutX="750" layoutY="410"
+              prefWidth="420" prefHeight="260"
+              visible="false">
+
+            <Button fx:id="restartButton"
+                    onAction="#onRestartClicked"
+                    prefWidth="300" prefHeight="80" />
+
+            <Button fx:id="backToMenuButton1"
+                    onAction="#onBackToMenuClicked"
+                    prefWidth="300" prefHeight="80" />
+        </VBox>
+		
+		<!-- =============PASS MENU============= -->
+		<VBox fx:id="passMenu"
+              alignment="CENTER" spacing="20"
+              layoutX="750" layoutY="410"
+              prefWidth="420" prefHeight="260"
+              visible="false">
+
+            <Button fx:id="continueButton1"
+                    onAction="#onRestartClicked"
+                    prefWidth="300" prefHeight="80" />
+
+            <Button fx:id="backToMenuButton2"
+                    onAction="#onBackToMenuClicked"
+                    prefWidth="300" prefHeight="80" />
+        </VBox>
+		
+				<!-- =============PASS MENU============= -->
+		<VBox fx:id="winMenu"
+              alignment="CENTER" spacing="20"
+              layoutX="750" layoutY="410"
+              prefWidth="420" prefHeight="260"
+              visible="false">
+
+            <Button fx:id="restartButton1"
+                    onAction="#onRestartClicked"
+                    prefWidth="300" prefHeight="80" />
+
+            <Button fx:id="backToMenuButton3"
                     onAction="#onBackToMenuClicked"
                     prefWidth="300" prefHeight="80" />
         </VBox>

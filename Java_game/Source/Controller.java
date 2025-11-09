@@ -17,14 +17,18 @@ public class Controller implements Initializable {
     @FXML public Canvas gameCanvas;
 
     @FXML public VBox mainMenu;
+	    @FXML public Button startButton;
+		@FXML public Button exitButton;
+		
     @FXML public VBox pauseMenu;
     @FXML public Rectangle overlay;
+	
+	@FXML VBox loseMenu;
+		@FXML Button restartButton1;
+		@FXML Button backToMenuButton1;
 
-    @FXML public Button startButton;
-    @FXML public Button exitButton;
     @FXML public Button continueButton;
     @FXML public Button backToMenuButton;
-
     public static GameEngine engine;
 
     @Override
@@ -49,13 +53,6 @@ public class Controller implements Initializable {
 		gameCanvas.layoutYProperty().bind(
 			scalePane.heightProperty().subtract(gameCanvas.heightProperty()).divide(2)
 		);
-		
-		// Request focus for keyboard input
-		//rootPane.setFocusTraversable(true);
-		//rootPane.requestFocus();
-		//Get input
-		//rootPane.setOnKeyPressed(e -> engine.onKeyPressed(e));
-		//rootPane.setOnKeyReleased(e -> engine.onKeyReleased(e));
     }
 
     /* ============ BUTTON HANDLERS ============ */
@@ -85,7 +82,17 @@ public class Controller implements Initializable {
 		overlay.setVisible(false);
         pauseMenu.setVisible(false);
 		gameCanvas.setVisible(false);
+		loseMenu.setVisible(false);
 		mainMenu.setVisible(true);
+	}
+	@FXML
+    public void onRestartClicked() {
+		engine.resetGame();
+		overlay.setVisible(false);
+        pauseMenu.setVisible(false);
+		gameCanvas.setVisible(false);
+		loseMenu.setVisible(false);
+		mainMenu.setVisible(false);
 	}
 }
 
