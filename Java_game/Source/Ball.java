@@ -3,6 +3,7 @@ import java.util.*;
 import javafx.scene.canvas.*;
 import javafx.scene.image.*;
 import javafx.scene.paint.*;
+import javafx.scene.media.*;
 public class Ball extends Object {
     final static int SIZE = 45;
     static double speed = 10;
@@ -11,6 +12,8 @@ public class Ball extends Object {
 	
 	//Loading texture
 	static final Image texture=new Image(Ball.class.getResource("/Source/Assets/Ball/0.png").toExternalForm());
+	//Loading sound
+	public static final AudioClip sound = new AudioClip(Ball.class.getResource("/Source/Assets/Sounds/Ball.wav").toExternalForm());
     // AABB collision
     public boolean AABBCheck(Brick brick) {
         return (this.x + SIZE > brick.x &&
@@ -32,12 +35,14 @@ public class Ball extends Object {
 
         // Top wall
         if (this.y < 0) {
+			sound.play();
             this.dy *= -1;
             return;
         }
 
         // Side walls
         if (this.x < 0 || this.x + SIZE > SIM_W) {
+			sound.play();
             this.dx *= -1;
             return;
         }
@@ -45,6 +50,7 @@ public class Ball extends Object {
 		// Paddle collision (only when ball moving downward)
 		Paddle p = engine.paddle;
 		if (y + SIZE >= p.y && y < p.y && x + SIZE > p.x && x < p.x + p.w && !bounced) {
+			sound.play();
 			bounced=true;
 			double angle = Math.toRadians(70) * Math.max(-1, Math.min(1, ((x + SIZE * 0.5) - (p.x + p.w * 0.5)) / (p.w * 0.5)));
 			dx = speed * Math.sin(angle);
@@ -58,7 +64,7 @@ public class Ball extends Object {
                 .toList();
 
         if (overlap.isEmpty()) return;
-
+		sound.play();
         // Find the brick with the deepest overlap (to avoid tunneling)
         Brick hitBrick = null;
         double maxOverlap = -1;
