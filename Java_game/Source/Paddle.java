@@ -5,11 +5,13 @@ import javafx.scene.image.*;
 import javafx.scene.paint.*;
 public class Paddle extends Object{
 	int w=200;
-	int h=40;
 	double speed=10;
+	double dx;
 	int currentPowerUp;
-	public void move(int x){
-		this.x=Math.max(Math.min(SIM_W-this.w, x), 0);
+	public void move(int X){
+		dx=this.x;
+		this.x=Math.max(Math.min(SIM_W-this.w, X-(this.w/2)-180), 0);
+		dx=(this.x-dx);
 		return;
 	}
 	public void moveright(){
@@ -25,8 +27,8 @@ public class Paddle extends Object{
 	}
 	public void render(GraphicsContext gc, double scale){
 		gc.setFill(Color.rgb(80, 80, 80, 1));
-		gc.fillRect((x+RENDER_OFFSET) * scale, y * scale, w * scale, h * scale);
+		gc.fillRect((x+RENDER_OFFSET) * scale, y * scale, w * scale, 20 * scale);
 		gc.setFill(Color.rgb(200, 200, 200, 1));
-		gc.fillRect((x+RENDER_OFFSET+5)*scale, (y+5)*scale, (w-10)*scale, (h-10)*scale);
+		gc.fillRect((x+RENDER_OFFSET+5)*scale, (y+5)*scale, (w-10)*scale, (10)*scale);
 	}
 }

@@ -1,6 +1,6 @@
 /* Make root black */
 #rootPane {
-    -fx-background-color: rgba(0, 0, 0, 1);
+    -fx-background-image: url("Assets/Buttons/Background.png");
 }
 
 /* Hide button borders */
@@ -32,7 +32,7 @@
 
 /* Pause menu background */
 #pauseMenu {
-    -fx-background-image: url("Assets/PauseBackground.png");
+    -fx-background-image: url("Assets/Buttons/Background.png");
     -fx-background-size: cover;
 }
 
@@ -66,6 +66,38 @@
     -fx-background-size: cover;
 }
 #backToMenuButton1:hover {
+    -fx-background-image: url("Assets/Buttons/Start_1.png");
+}
+/*Pass Menu*/
+#continueButton1 {
+    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-size: cover;
+}
+#continueButton1:hover {
+    -fx-background-image: url("Assets/Buttons/Start_1.png");
+}
+
+#backToMenuButton2 {
+    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-size: cover;
+}
+#backToMenuButton2:hover {
+    -fx-background-image: url("Assets/Buttons/Start_1.png");
+}
+/*Win Menu*/
+#restartButton1 {
+    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-size: cover;
+}
+#restartButton1:hover {
+    -fx-background-image: url("Assets/Buttons/Start_1.png");
+}
+
+#backToMenuButton3 {
+    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-size: cover;
+}
+#backToMenuButton3:hover {
     -fx-background-image: url("Assets/Buttons/Start_1.png");
 }
 

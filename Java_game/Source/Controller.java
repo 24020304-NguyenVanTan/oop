@@ -21,14 +21,22 @@ public class Controller implements Initializable {
 		@FXML public Button exitButton;
 		
     @FXML public VBox pauseMenu;
-    @FXML public Rectangle overlay;
+		@FXML public Rectangle overlay;
+		@FXML public Button continueButton;
+		@FXML public Button backToMenuButton;
 	
 	@FXML VBox loseMenu;
-		@FXML Button restartButton1;
+		@FXML Button restartButton;
 		@FXML Button backToMenuButton1;
-
-    @FXML public Button continueButton;
-    @FXML public Button backToMenuButton;
+	
+	@FXML VBox passMenu;
+		@FXML Button continueButton1;
+		@FXML Button backToMenuButton2;
+		
+	@FXML VBox winMenu;
+		@FXML Button restartButton1;
+		@FXML Button backToMenuButton3;
+	
     public static GameEngine engine;
 
     @Override
@@ -59,40 +67,71 @@ public class Controller implements Initializable {
 
     @FXML
     public void onStartClicked() {
+		System.out.println("Main menu off, Game play start");
+		engine.initGame();
         engine.GAME_STATE = 1;
 		mainMenu.setVisible(false);
+		winMenu.setVisible(false);
+		passMenu.setVisible(false);
+		pauseMenu.setVisible(false);
+		loseMenu.setVisible(false);
         gameCanvas.setVisible(true);
     }
 
     @FXML
     public void onQuitClicked() {
         Platform.runLater(Platform::exit);
+		System.out.println("Exited");
     }
 
     @FXML
     public void onContinueClicked() {
+		if(engine.GAME_STATE==4){
+			System.out.println("Already won, next play through start");
+			engine.initGame();
+		}
+		else if(engine.GAME_STATE==2){
+			System.out.println("Unpause, game resume");
+		}
+		else{
+			System.out.println("Level passed, next level");
+		}
         engine.GAME_STATE = 1;
 		overlay.setVisible(false);
         pauseMenu.setVisible(false);
+		passMenu.setVisible(false);
     }
 
     @FXML
     public void onBackToMenuClicked() {
+		if(engine.GAME_STATE==2) {
+			System.out.println("From pause to main menu");
+		}
+		else if(engine.GAME_STATE==4) {
+			System.out.println("Already won, back to menu");
+		}
         engine.GAME_STATE = 0;
 		overlay.setVisible(false);
         pauseMenu.setVisible(false);
+		passMenu.setVisible(false);
+		winMenu.setVisible(false);
 		gameCanvas.setVisible(false);
 		loseMenu.setVisible(false);
 		mainMenu.setVisible(true);
+		System.out.println("Menu: Main");
 	}
+	
 	@FXML
     public void onRestartClicked() {
-		engine.resetGame();
+		engine.level=0;
+		engine.initGame();
 		overlay.setVisible(false);
-        pauseMenu.setVisible(false);
-		gameCanvas.setVisible(false);
 		loseMenu.setVisible(false);
-		mainMenu.setVisible(false);
+		passMenu.setVisible(false);
+		winMenu.setVisible(false);
 	}
+	
+	//@FXML
+	//public void onRestart
 }
 

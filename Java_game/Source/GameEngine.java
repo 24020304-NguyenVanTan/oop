@@ -19,14 +19,15 @@ public class GameEngine extends Application {
     // Simulation size
     public static final int SIM_W = 1560;
     public static final int SIM_H = 1080;
-
+	
+	final int MAX_LEVEL=1;
 	int level = 0;
 
-    int GAME_STATE = 0;
+    int GAME_STATE = 0; // 0:menu, 1:ingame, 2:pause, 3:lose, 4:win
 
     // Game objects
-    Paddle paddle;
-    Ball ball;
+    Paddle paddle = new Paddle();
+    Ball ball = new Ball();
     ArrayList<Brick> bricks = new ArrayList<>();
     ArrayList<Item> items = new ArrayList<>();
 
@@ -100,24 +101,37 @@ public class GameEngine extends Application {
 		});
 
         // --- Initialize game ---
-        initGame();
+        //initGame();
 
         // --- Game loop ---
-        new AnimationTimer() {
-            long last = 0;
-            @Override
-            public void handle(long now) {
-                if (last == 0) {
-                    last = now;
-                    return;
-                }
-                double deltaTime = (now - last) / 1e9;
-                last = now;
-                update(deltaTime);
-                render();
-            }
-        }.start();
-    }
+		// --- Fixed timestep loop (60 FPS) ---
+		final double FRAME_DURATION = 1.0 / 60.0; // seconds per frame
+		new AnimationTimer() {
+			long lastTime = 0;
+			double accumulator = 0;
+
+			@Override
+			public void handle(long now) {
+				if (lastTime == 0) {
+					lastTime = now;
+					return;
+				}
+
+				// Time since last frame (in seconds)
+				double delta = (now - lastTime) / 1e9;
+				lastTime = now;
+				accumulator += delta;
+
+				// Run as many fixed updates as needed (usually 1)
+				while (accumulator >= FRAME_DURATION) {
+					update(); // no delta parameter needed anymore
+					accumulator -= FRAME_DURATION;
+				}
+
+				render(); // render once per frame
+			}
+		}.start();
+	}
 
 
     /** Called on ESC -> pause */
@@ -127,27 +141,22 @@ public class GameEngine extends Application {
         controller.pauseMenu.setVisible(true);
     }
 
-    private void initGame() {
-        paddle = new Paddle();
-        paddle.x = (SIM_W - paddle.w) / 2;
-        paddle.y = SIM_H - 100;
-
-        ball = new Ball();
-        ball.x = SIM_W / 2 - Ball.BALL_SIZE / 2;
-        ball.y = SIM_H / 2;
-        ball.dx = 5;
-        ball.dy = -5;
+    void initGame() {
         loadLevel("/Source/Assets/Levels/"+level+".txt");
+		resetGame();
     }
 
-    private void update(double delta) {
+    private void update() {
         if (GAME_STATE != 1) return;
-
+		if(bricks.isEmpty()){
+			onPass();
+			System.out.println("Passed");
+		}
         if (pressedKeys.contains(KeyCode.LEFT)) paddle.moveleft();
         if (pressedKeys.contains(KeyCode.RIGHT)) paddle.moveright();
 
         if (mousePressed) {
-            paddle.move((int) (mouseX / (controller.gameCanvas.getWidth() / SIM_W)));
+            paddle.move((int) (mouseX/scale));
         }
 
         ball.update();
@@ -198,14 +207,40 @@ public class GameEngine extends Application {
         }
     }
 	public void resetGame(){
+		//Paddle
+        paddle.x = (SIM_W - paddle.w) / 2;
+        paddle.y = SIM_H - 100;
+		//Ball
+        ball.x = SIM_W / 2 - Ball.SIZE / 2;
+        ball.y = paddle.y-Ball.SIZE-1;
+		Random r= new Random(); //Random ball movement
+		double angle = Math.toRadians(120 * r.nextDouble() - 60); 
+		ball.dx = Ball.speed * Math.sin(angle);
+		ball.dy = -Ball.speed * Math.cos(angle);
 		GAME_STATE=1;
-		level = 0;
 	}
 	
 	public void onLose() {
 		GAME_STATE=3;
 		controller.overlay.setVisible(true);
 		controller.loseMenu.setVisible(true);
+		System.out.println("Menu: Lose");
+	}
+	
+	public void onPass() {
+		GAME_STATE=4;
+		level++;
+		controller.overlay.setVisible(true);
+		if(level<MAX_LEVEL){
+			controller.passMenu.setVisible(true);
+			System.out.println("Menu: Pass");
+		}
+		else{
+			controller.winMenu.setVisible(true);
+			System.out.println("Menu: Win");
+			//Ball.speed+=10;
+			level=0;
+		}
 	}
 
     public static void main(String[] args) {

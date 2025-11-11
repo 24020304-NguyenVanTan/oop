@@ -84,7 +84,7 @@
               visible="false">
 
             <Button fx:id="continueButton1"
-                    onAction="#onRestartClicked"
+                    onAction="#onContinueClicked"
                     prefWidth="300" prefHeight="80" />
 
             <Button fx:id="backToMenuButton2"
@@ -92,7 +92,7 @@
                     prefWidth="300" prefHeight="80" />
         </VBox>
 		
-				<!-- =============PASS MENU============= -->
+		<!-- =============WIN MENU============= -->
 		<VBox fx:id="winMenu"
               alignment="CENTER" spacing="20"
               layoutX="750" layoutY="410"

@@ -22,7 +22,7 @@ public class Item extends Object {
 	public void update() {
 		this.y+=speed;
 		Paddle p = engine.paddle;
-		if (this.x + SIZE > p.x && this.x < p.x + p.w && this.y + SIZE > p.y && this.y < p.y + p.h) {
+		if (y + SIZE >= p.y && y < p.y && x + SIZE > p.x && x < p.x + p.w) {
 			this.y=SIM_H;
 		}
 		return;
