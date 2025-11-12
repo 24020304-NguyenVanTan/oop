@@ -23,82 +23,76 @@
 }
 
 #quitButton {
-    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-image: url("Assets/Buttons/Exit_0.png");
     -fx-background-size: cover;
 }
 #quitButton:hover {
-    -fx-background-image: url("Assets/Buttons/Start_1.png");
-}
-
-/* Pause menu background */
-#pauseMenu {
-    -fx-background-image: url("Assets/Buttons/Background.png");
-    -fx-background-size: cover;
+    -fx-background-image: url("Assets/Buttons/Exit_1.png");
 }
 
 /* Pause menu buttons */
 #continueButton {
-    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-image: url("Assets/Buttons/Continue_0.png");
     -fx-background-size: cover;
 }
 #continueButton:hover {
-    -fx-background-image: url("Assets/Buttons/Start_1.png");
+    -fx-background-image: url("Assets/Buttons/Continue_1.png");
 }
 
 #backToMenuButton {
-    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-image: url("Assets/Buttons/Menu_0.png");
     -fx-background-size: cover;
 }
 #backToMenuButton:hover {
-    -fx-background-image: url("Assets/Buttons/Start_1.png");
+    -fx-background-image: url("Assets/Buttons/Menu_1.png");
 }
 /*Lose Menu*/
 #restartButton {
-    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-image: url("Assets/Buttons/Restart_0.png");
     -fx-background-size: cover;
 }
 #restartButton:hover {
-    -fx-background-image: url("Assets/Buttons/Start_1.png");
+    -fx-background-image: url("Assets/Buttons/Restart_1.png");
 }
 
 #backToMenuButton1 {
-    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-image: url("Assets/Buttons/Menu_0.png");
     -fx-background-size: cover;
 }
 #backToMenuButton1:hover {
-    -fx-background-image: url("Assets/Buttons/Start_1.png");
+    -fx-background-image: url("Assets/Buttons/Menu_1.png");
 }
 /*Pass Menu*/
 #continueButton1 {
-    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-image: url("Assets/Buttons/Continue_0.png");
     -fx-background-size: cover;
 }
 #continueButton1:hover {
-    -fx-background-image: url("Assets/Buttons/Start_1.png");
+    -fx-background-image: url("Assets/Buttons/Continue_1.png");
 }
 
 #backToMenuButton2 {
-    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-image: url("Assets/Buttons/Menu_0.png");
     -fx-background-size: cover;
 }
 #backToMenuButton2:hover {
-    -fx-background-image: url("Assets/Buttons/Start_1.png");
+    -fx-background-image: url("Assets/Buttons/Menu_1.png");
 }
 /*Win Menu*/
 #restartButton1 {
-    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-image: url("Assets/Buttons/Restart_0.png");
     -fx-background-size: cover;
 }
 #restartButton1:hover {
-    -fx-background-image: url("Assets/Buttons/Start_1.png");
+    -fx-background-image: url("Assets/Buttons/Restart_1.png");
 }
 
 #backToMenuButton3 {
-    -fx-background-image: url("Assets/Buttons/Start_0.png");
+    -fx-background-image: url("Assets/Buttons/Menu_0.png");
     -fx-background-size: cover;
 }
 #backToMenuButton3:hover {
-    -fx-background-image: url("Assets/Buttons/Start_1.png");
+    -fx-background-image: url("Assets/Buttons/Menu_1.png");
 }
 
 /* Dark overlay while paused */

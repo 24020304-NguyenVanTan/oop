@@ -24,6 +24,10 @@ public class Item extends Object {
 		Paddle p = engine.paddle;
 		if (y + SIZE >= p.y && y < p.y && x + SIZE > p.x && x < p.x + p.w) {
 			this.y=SIM_H;
+			switch(type){
+				case 0:
+					p.w+=20;
+			}
 		}
 		return;
 	}

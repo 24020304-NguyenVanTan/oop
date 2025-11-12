@@ -20,7 +20,7 @@ public class GameEngine extends Application {
     public static final int SIM_W = 1560;
     public static final int SIM_H = 1080;
 	
-	final int MAX_LEVEL=1;
+	final int MAX_LEVEL=7;
 	int level = 0;
 
     int GAME_STATE = 0; // 0:menu, 1:ingame, 2:pause, 3:lose, 4:win
@@ -100,9 +100,6 @@ public class GameEngine extends Application {
 		scene.setOnKeyReleased(e -> {pressedKeys.remove(e.getCode());
 		});
 
-        // --- Initialize game ---
-        //initGame();
-
         // --- Game loop ---
 		// --- Fixed timestep loop (60 FPS) ---
 		final double FRAME_DURATION = 1.0 / 60.0; // seconds per frame
@@ -176,8 +173,14 @@ public class GameEngine extends Application {
         ball.render(gc, scale);
 
         // side bars
-        gc.fillRect(0, 0, 180 * scale, 1080 * scale);
-        gc.fillRect((1920 - 180) * scale, 0, 180 * scale, 1080 * scale);
+		gc.setFill(Color.rgb(80, 80, 80, 1));
+        gc.fillRect(175*scale, 0, 5 * scale, 1080 * scale);
+        gc.fillRect((1920 - 180) * scale, 0, 5 * scale, 1080 * scale);
+		
+		gc.setFill(Color.rgb(200, 200, 200, 1));
+        gc.fillRect(0, 0, 175 * scale, 1080 * scale);
+        gc.fillRect((1920 - 175) * scale, 0, 175 * scale, 1080 * scale);
+		
     }
 	
 	//Working fine as is
@@ -208,6 +211,7 @@ public class GameEngine extends Application {
     }
 	public void resetGame(){
 		//Paddle
+		paddle.w=200;
         paddle.x = (SIM_W - paddle.w) / 2;
         paddle.y = SIM_H - 100;
 		//Ball
