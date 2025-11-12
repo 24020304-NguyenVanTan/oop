@@ -52,6 +52,8 @@ public class Ball extends Object {
         if (this.y < 0) {
 			sound.play();
             this.dy *= -1;
+			x+=(1-this.y)*dx/dy;
+			y=1;
             return;
         }
 
