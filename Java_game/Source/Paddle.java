@@ -13,7 +13,7 @@ public class Paddle extends Object{
 	private int cooldown = 0;
 	
 	public void addAmmo(int n) {
-		ammo+=n;
+		ammo=Math.max(0, ammo+n);
 	}
 	public void setCountdown() {
 		countdown=60*5;
@@ -51,7 +51,6 @@ public class Paddle extends Object{
 		countdown = Math.max(0, countdown-1);
 		if(countdown == 0 && w>200){
 			w-=20;
-			System.out.println("Paddle w: "+w);
 			if(w>200) countdown=60*5;
 		}
 		return;

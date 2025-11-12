@@ -5,13 +5,16 @@ import javafx.scene.image.*;
 import javafx.scene.paint.*;
 import javafx.scene.media.*;
 public class Ball extends Object {
-    final static int SIZE = 45;
+    static int SIZE = 40;
     static double speed = 10;
     double dx, dy;
 	boolean bounced=false;
-	
+	private int countdown = 0;
 	//Loading texture
-	static final Image texture=new Image(Ball.class.getResource("/Source/Assets/Ball/0.png").toExternalForm());
+	static final Image[] texture={
+		new Image(Ball.class.getResource("/Source/Assets/Ball/0.png").toExternalForm()),
+		new Image(Ball.class.getResource("/Source/Assets/Ball/1.png").toExternalForm())
+	};
 	//Loading sound
 	public static final AudioClip sound = new AudioClip(Ball.class.getResource("/Source/Assets/Sounds/Ball.wav").toExternalForm());
     // AABB collision
@@ -21,9 +24,23 @@ public class Ball extends Object {
                 this.y + SIZE > brick.y &&
                 this.y < brick.y + brick.h);
     }
-
+	public void setCountdown(){//5 sec of power up
+		countdown=60*5;
+		SIZE=80;
+		x-=20;
+		y-=20;
+	}
     // Update
     public void update() {
+		if(countdown>0){
+			countdown--;
+			if(countdown==0){
+				SIZE=40;
+				x+=20;
+				y+=20;
+			}
+		}
+		
         x += dx;
         y += dy;
 
@@ -65,39 +82,47 @@ public class Ball extends Object {
 
         if (overlap.isEmpty()) return;
 		sound.play();
-        // Find the brick with the deepest overlap (to avoid tunneling)
-        Brick hitBrick = null;
-        double maxOverlap = -1;
+		if(countdown==0){
+			// Find the brick with the deepest overlap (to avoid tunneling)
+			Brick hitBrick = null;
+			double maxOverlap = -1;
 
-        for (Brick b : overlap) {
-            // Calculate overlap along x and y
-            double overlapX = Math.min(this.x + SIZE, b.x + b.w) - Math.max(this.x, b.x);
-            double overlapY = Math.min(this.y + SIZE, b.y + b.h) - Math.max(this.y, b.y);
-            double totalOverlap = overlapX * overlapY; // can also use min or sum, depends on how you prefer
-            if (totalOverlap > maxOverlap) {
-                maxOverlap = totalOverlap;
-                hitBrick = b;
-            }
-        }
+			for (Brick b : overlap) {
+				// Calculate overlap along x and y
+				double overlapX = Math.min(this.x + SIZE, b.x + b.w) - Math.max(this.x, b.x);
+				double overlapY = Math.min(this.y + SIZE, b.y + b.h) - Math.max(this.y, b.y);
+				double totalOverlap = overlapX * overlapY; // can also use min or sum, depends on how you prefer
+				if (totalOverlap > maxOverlap) {
+					maxOverlap = totalOverlap;
+					hitBrick = b;
+				}
+			}
 
-        if (hitBrick == null) return;
-        // Resolve collision by reflecting along the smaller overlap axis
-        double overlapX = Math.min(this.x + SIZE, hitBrick.x + hitBrick.w) - Math.max(this.x, hitBrick.x);
-        double overlapY = Math.min(this.y + SIZE, hitBrick.y + hitBrick.h) - Math.max(this.y, hitBrick.y);
+			if (hitBrick == null) return;
+			// Resolve collision by reflecting along the smaller overlap axis
+			double overlapX = Math.min(this.x + SIZE, hitBrick.x + hitBrick.w) - Math.max(this.x, hitBrick.x);
+			double overlapY = Math.min(this.y + SIZE, hitBrick.y + hitBrick.h) - Math.max(this.y, hitBrick.y);
 
-        if (overlapX < overlapY) {
-            // Hit from side
-            dx *= -1;
-        } else {
-            // Hit from top/bottom
-            dy *= -1;
-        }
-		engine.score++;
-		hitBrick.update();
+			if (overlapX < overlapY) {
+				// Hit from side
+				dx *= -1;
+			} else {
+				// Hit from top/bottom
+				dy *= -1;
+			}
+			engine.score++;
+			hitBrick.update();
+		}
+		else{
+			for (Brick b : overlap) b.update();
+		} 
     }
 
     public void render(GraphicsContext gc, double SCALE) {
-        gc.drawImage(texture, (x+RENDER_OFFSET) * SCALE, y * SCALE, SIZE * SCALE, SIZE * SCALE);
+		int t;
+		if(countdown==0) t=0;
+		else t=1;
+        gc.drawImage(texture[t], (x+RENDER_OFFSET) * SCALE, y * SCALE, SIZE * SCALE, SIZE * SCALE);
 		return;
     }
 }

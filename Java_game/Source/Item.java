@@ -11,7 +11,9 @@ public class Item extends Object {
 	//Loading texture
 	static final Image[] texture = { 
 		new Image(Item.class.getResource("/Source/Assets/Item/0.png").toExternalForm()),
-		new Image(Item.class.getResource("/Source/Assets/Item/1.png").toExternalForm())};
+		new Image(Item.class.getResource("/Source/Assets/Item/1.png").toExternalForm()),
+		new Image(Item.class.getResource("/Source/Assets/Item/2.png").toExternalForm()),
+	};
 	
 	public Item(double x, double y, int type) {
 		this.x=x;
@@ -25,12 +27,16 @@ public class Item extends Object {
 		if (y + SIZE >= p.y && y < p.y && x + SIZE > p.x && x < p.x + p.w) {
 			this.y=SIM_H;
 			switch(type){
-				case 0:
+				case 0://Make paddle bigger
 					p.w+=20;
-					System.out.println("Paddle w: "+p.w);
 					p.setCountdown();
-				case 1:
+					break;
+				case 1://Enable gun mode
 					p.addAmmo(10);
+					break;
+				case 2://Make ball an unstoppable buzzsaw
+					engine.ball.setCountdown();
+					break;
 				
 			}
 		}

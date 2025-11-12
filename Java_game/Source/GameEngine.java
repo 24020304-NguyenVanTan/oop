@@ -153,7 +153,6 @@ public class GameEngine extends Application {
         if (GAME_STATE != 1) return;
 		if(bricks.isEmpty()){
 			onPass();
-			System.out.println("Passed");
 		}
 		paddle.update();
 
@@ -235,6 +234,12 @@ public class GameEngine extends Application {
 		double angle = Math.toRadians(120 * r.nextDouble() - 60); 
 		ball.dx = Ball.speed * Math.sin(angle);
 		ball.dy = -Ball.speed * Math.cos(angle);
+		//Clear lists
+		items.clear();
+		bullets.clear();
+		paddle.addAmmo(-1000);
+		//Clear score
+		score=0;
 		GAME_STATE=1;
 	}
 	
@@ -242,7 +247,6 @@ public class GameEngine extends Application {
 		GAME_STATE=3;
 		controller.overlay.setVisible(true);
 		controller.loseMenu.setVisible(true);
-		System.out.println("Menu: Lose");
 	}
 	
 	public void onPass() {
@@ -252,11 +256,9 @@ public class GameEngine extends Application {
 		controller.overlay.setVisible(true);
 		if(level<MAX_LEVEL){
 			controller.passMenu.setVisible(true);
-			System.out.println("Menu: Pass");
 		}
 		else{
 			controller.winMenu.setVisible(true);
-			System.out.println("Menu: Win");
 			Ball.speed+=1;
 			level=0;
 		}
