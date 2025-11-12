@@ -1,0 +1,3 @@
+javac --module-path "D:\JavaFX_25\lib" --add-modules javafx.controls,javafx.graphics,javafx.fxml,javafx.media Source\*.java
+
+java --module-path "D:\JavaFX_25\lib" --add-modules javafx.controls,javafx.graphics,javafx.fxml,javafx.media --enable-native-access=javafx.graphics,javafx.media Source.GameEngine
