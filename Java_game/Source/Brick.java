@@ -19,7 +19,8 @@ class Brick extends Object{
                     load("Source/Assets/Brick/3-3.png"),
                     load("Source/Assets/Brick/3-4.png"),
                     load("Source/Assets/Brick/3-5.png") },
-            { null, load("Source/Assets/Brick/4-1.png") }
+            { null, load("Source/Assets/Brick/4-1.png") },
+			{ null, load("Source/Assets/Brick/5-1.png") },
     };
 
     private static Image load(String path) {
@@ -43,6 +44,9 @@ class Brick extends Object{
 			case 4:
 				this.hp=1;
 				break;
+			case 5:
+				this.hp=1;
+				break;	
 		}
 	}
 	public void update(){
@@ -57,6 +61,9 @@ class Brick extends Object{
 					break;
 				case 4:
 					engine.items.add(new Item(this.x+(this.w-Item.SIZE)/2, this.y+(this.h-Item.SIZE)/2, 0));
+					break;
+				case 5:
+					engine.items.add(new Item(this.x+(this.w-Item.SIZE)/2, this.y+(this.h-Item.SIZE)/2, 1));
 					break;
 			}
 			engine.bricks.remove(this);

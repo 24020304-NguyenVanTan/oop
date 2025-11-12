@@ -9,7 +9,9 @@ public class Item extends Object {
 	int type;
 	
 	//Loading texture
-	static final Image[] texture = { new Image(Item.class.getResource("/Source/Assets/Item/0.png").toExternalForm())};
+	static final Image[] texture = { 
+		new Image(Item.class.getResource("/Source/Assets/Item/0.png").toExternalForm()),
+		new Image(Item.class.getResource("/Source/Assets/Item/1.png").toExternalForm())};
 	
 	public Item(double x, double y, int type) {
 		this.x=x;
@@ -25,6 +27,11 @@ public class Item extends Object {
 			switch(type){
 				case 0:
 					p.w+=20;
+					System.out.println("Paddle w: "+p.w);
+					p.setCountdown();
+				case 1:
+					p.addAmmo(10);
+				
 			}
 		}
 		return;
@@ -33,7 +40,5 @@ public class Item extends Object {
 	public void render(GraphicsContext gc, double SCALE) {
         gc.drawImage(texture[this.type], (x+RENDER_OFFSET) * SCALE, y * SCALE, SIZE * SCALE, SIZE * SCALE);
 		return;
-    }
-	
-	
+    }	
 }

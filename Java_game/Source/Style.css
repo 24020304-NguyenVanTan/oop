@@ -1,6 +1,6 @@
 /* Make root black */
 #rootPane {
-    -fx-background-image: url("Assets/Buttons/Background.png");
+    -fx-background-color: black;
 }
 
 /* Hide button borders */

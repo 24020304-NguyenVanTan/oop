@@ -31,17 +31,21 @@ public class GameEngine extends Application {
     Ball ball = new Ball();
     ArrayList<Brick> bricks = new ArrayList<>();
     ArrayList<Item> items = new ArrayList<>();
+	ArrayList<Bullet> bullets = new ArrayList<>();
 
     // Input tracking
-    private final Set<KeyCode> pressedKeys = new HashSet<>();
-    private double mouseX;
-    private boolean mousePressed = false;
+    final Set<KeyCode> pressedKeys = new HashSet<>();
+    double mouseX;
+    boolean mousePressed = false;
 
     // Canvas + graphics
     private double screenW, screenH;
     private GraphicsContext gc;
     private double scale;
-
+	
+	public double getScale() {
+		return scale;
+	}
     // References
     private Stage stage;
     private Controller controller;
@@ -151,31 +155,22 @@ public class GameEngine extends Application {
 			onPass();
 			System.out.println("Passed");
 		}
-        if (pressedKeys.contains(KeyCode.LEFT)) paddle.moveleft();
-        if (pressedKeys.contains(KeyCode.RIGHT)) paddle.moveright();
-
-        if (mousePressed) {
-            paddle.move((int) (mouseX/scale));
-        }
+		paddle.update();
 
         ball.update();
         items.parallelStream().forEach(Item::update);
         items.removeIf(i -> i.y >= SIM_H);
+		for(Bullet b : bullets) b.update();
+		bullets.removeIf(b -> b.y <0);
     }
 
     private void render() {
 		if (GAME_STATE != 1) return;
-
+		
 		// Clear background
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, screenW, screenH);
-
-		// Draw game objects
-		for (Brick b : bricks) b.render(gc, scale);
-		for (Item i : items) i.render(gc, scale);
-		paddle.render(gc, scale);
-		ball.render(gc, scale);
-
+		
 		// Side bars
 		gc.setFill(Color.rgb(80, 80, 80, 1));
 		gc.fillRect(175 * scale, 0, 5 * scale, 1080 * scale);
@@ -184,6 +179,14 @@ public class GameEngine extends Application {
 		gc.setFill(Color.rgb(200, 200, 200, 1));
 		gc.fillRect(0, 0, 175 * scale, 1080 * scale);
 		gc.fillRect((1920 - 175) * scale, 0, 175 * scale, 1080 * scale);
+
+		// Draw game objects
+		for (Brick b : bricks) b.render(gc, scale);
+		for (Item i : items) i.render(gc, scale);
+		for (Bullet b : bullets) b.render(gc, scale);
+		paddle.render(gc, scale);
+		ball.render(gc, scale);
+
 
 		// --- Draw score ---
 		gc.setFill(Color.BLACK);
