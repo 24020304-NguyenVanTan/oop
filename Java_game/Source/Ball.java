@@ -92,7 +92,7 @@ public class Ball extends Object {
             // Hit from top/bottom
             dy *= -1;
         }
-		
+		engine.score++;
 		hitBrick.update();
     }
 

@@ -22,6 +22,7 @@ public class GameEngine extends Application {
 	
 	final int MAX_LEVEL=7;
 	int level = 0;
+	int score=0;
 
     int GAME_STATE = 0; // 0:menu, 1:ingame, 2:pause, 3:lose, 4:win
 
@@ -76,6 +77,7 @@ public class GameEngine extends Application {
         canvas.setWidth(screenW);
         canvas.setHeight(screenH);
         gc = canvas.getGraphicsContext2D();
+		gc.setImageSmoothing(false);
 
         // --- Input handling ---
         root.setOnMouseMoved(e -> mouseX = e.getX());
@@ -162,26 +164,35 @@ public class GameEngine extends Application {
     }
 
     private void render() {
-        if (GAME_STATE != 1) return;
+		if (GAME_STATE != 1) return;
 
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, screenW, screenH);
+		// Clear background
+		gc.setFill(Color.BLACK);
+		gc.fillRect(0, 0, screenW, screenH);
 
-        for (Brick b : bricks) b.render(gc, scale);
-        for (Item i : items) i.render(gc, scale);
-        paddle.render(gc, scale);
-        ball.render(gc, scale);
+		// Draw game objects
+		for (Brick b : bricks) b.render(gc, scale);
+		for (Item i : items) i.render(gc, scale);
+		paddle.render(gc, scale);
+		ball.render(gc, scale);
 
-        // side bars
+		// Side bars
 		gc.setFill(Color.rgb(80, 80, 80, 1));
-        gc.fillRect(175*scale, 0, 5 * scale, 1080 * scale);
-        gc.fillRect((1920 - 180) * scale, 0, 5 * scale, 1080 * scale);
-		
+		gc.fillRect(175 * scale, 0, 5 * scale, 1080 * scale);
+		gc.fillRect((1920 - 180) * scale, 0, 5 * scale, 1080 * scale);
+
 		gc.setFill(Color.rgb(200, 200, 200, 1));
-        gc.fillRect(0, 0, 175 * scale, 1080 * scale);
-        gc.fillRect((1920 - 175) * scale, 0, 175 * scale, 1080 * scale);
-		
-    }
+		gc.fillRect(0, 0, 175 * scale, 1080 * scale);
+		gc.fillRect((1920 - 175) * scale, 0, 175 * scale, 1080 * scale);
+
+		// --- Draw score ---
+		gc.setFill(Color.BLACK);
+		gc.setFont(new javafx.scene.text.Font(40 * scale)); // scaled font
+		gc.fillText("Score: ", 30 * scale, 60 * scale);
+		gc.fillText(""+score, 30 * scale, 100 * scale);
+		gc.fillText("Level: ", 1770 * scale, 60 * scale);
+		gc.fillText(""+(level+1), 1770 * scale, 100 * scale);		
+	}
 	
 	//Working fine as is
     public void loadLevel(String resourcePath) {
@@ -234,6 +245,7 @@ public class GameEngine extends Application {
 	public void onPass() {
 		GAME_STATE=4;
 		level++;
+		score=0;
 		controller.overlay.setVisible(true);
 		if(level<MAX_LEVEL){
 			controller.passMenu.setVisible(true);
@@ -242,7 +254,7 @@ public class GameEngine extends Application {
 		else{
 			controller.winMenu.setVisible(true);
 			System.out.println("Menu: Win");
-			//Ball.speed+=10;
+			Ball.speed+=1;
 			level=0;
 		}
 	}

@@ -9,9 +9,7 @@ public class Item extends Object {
 	int type;
 	
 	//Loading texture
-	static final Image[] texture = {
-		new Image("Assets/Item/0.png")
-	};
+	static final Image[] texture = { new Image(Item.class.getResource("/Source/Assets/Item/0.png").toExternalForm())};
 	
 	public Item(double x, double y, int type) {
 		this.x=x;
