@@ -11,7 +11,7 @@ import java.util.*;
 import javafx.application.*;
 import javafx.scene.media.*;
 
-public class Controller implements Initializable {
+public class Controller implements Initializable {//Implement interface
 	//Loading sound
 	public static final AudioClip sound = new AudioClip(Controller.class.getResource("/Source/Assets/Sounds/Click.wav").toExternalForm());
 

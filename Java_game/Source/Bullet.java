@@ -6,7 +6,7 @@ public class Bullet extends Object {
 	final static int SIZE = 16;
 	static double speed=15;
 	static final Image texture=new Image(Bullet.class.getResource("/Source/Assets/Item/Bullet.png").toExternalForm());
-	
+	//AABB check, borrowed from ball since it also collide with bricks
 	public boolean AABBCheck(Brick brick) {
         return (this.x + SIZE > brick.x &&
                 this.x < brick.x + brick.w &&

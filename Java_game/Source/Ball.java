@@ -8,12 +8,12 @@ public class Ball extends Object {
     static int SIZE = 40;
     static double speed = 10;
     double dx, dy;
-	boolean bounced=false;
+	boolean bounced=false;//This make sure the ball doesn't bounce twice on the paddle
 	private int countdown = 0;
 	//Loading texture
 	static final Image[] texture={
-		new Image(Ball.class.getResource("/Source/Assets/Ball/0.png").toExternalForm()),
-		new Image(Ball.class.getResource("/Source/Assets/Ball/1.png").toExternalForm())
+		new Image(Ball.class.getResource("/Source/Assets/Ball/0.png").toExternalForm()),//Normal ball
+		new Image(Ball.class.getResource("/Source/Assets/Ball/1.png").toExternalForm())//Big buzzsaw
 	};
 	//Loading sound
 	public static final AudioClip sound = new AudioClip(Ball.class.getResource("/Source/Assets/Sounds/Ball.wav").toExternalForm());
@@ -25,20 +25,30 @@ public class Ball extends Object {
                 this.y < brick.y + brick.h);
     }
 	public void setCountdown(){//5 sec of power up
+		if(countdown==0){//Normalize new coord to preserve center coord
+			x-=20;
+			y-=20;
+		}
 		countdown=60*5;
-		SIZE=80;
-		x-=20;
-		y-=20;
+		SIZE=80;//Twice normal size
+	}
+	public void resetCountdown() {
+		if(countdown>0) {
+			x+=20;
+			y+=20;
+			countdown=0;
+			SIZE=40;
+		}
 	}
     // Update
     public void update() {
 		if(countdown>0){
-			countdown--;
+			countdown--;//Count down until buzz saw power up run out
 			if(countdown==0){
 				SIZE=40;
 			}
 		}
-		
+		//Update coord
         x += dx;
         y += dy;
 
@@ -53,7 +63,7 @@ public class Ball extends Object {
 			sound.play();
             this.dy *= -1;
 			x+=(1-this.y)*dx/dy;
-			y=1;
+			y=1;//Make sure ball clear the bound
             return;
         }
 
@@ -61,6 +71,7 @@ public class Ball extends Object {
         if (this.x < 0 || this.x + SIZE > SIM_W) {
 			sound.play();
             this.dx *= -1;
+			//Make sure ball clear the bound
 			if(this.x < 0) {
 				y+=(1-this.x)*dy/dx;
 				x=1;
@@ -72,16 +83,16 @@ public class Ball extends Object {
             return;
         }
 
-		// Paddle collision (only when ball moving downward)
+		// Paddle collision
 		Paddle p = engine.paddle;
-		if (y + SIZE >= p.y && y < p.y && x + SIZE > p.x && x < p.x + p.w && !bounced) {
+		if (y + SIZE >= p.y && y < p.y && x + SIZE > p.x && x < p.x + p.w && !bounced) {//Again, AABB
 			sound.play();
-			bounced=true;
+			bounced=true;//Disable bouncing, just to be safe
 			double angle = Math.toRadians(70) * Math.max(-1, Math.min(1, ((x + SIZE * 0.5) - (p.x + p.w * 0.5)) / (p.w * 0.5)));
 			dx = speed * Math.sin(angle);
 			dy = -speed * Math.cos(angle);
 		}
-		else if(y+SIZE<p.y) bounced=false;
+		else if(y+SIZE<p.y) bounced=false;//Only when the ball clear the paddle's y can it bounce again
 		
         // Brick collision detection
         List<Brick> overlap = engine.bricks.parallelStream()
@@ -90,9 +101,8 @@ public class Ball extends Object {
 
         if (overlap.isEmpty()) return;
 		sound.play();
-		engine.score++;
-		if(countdown==0){
-			// Find the brick with the deepest overlap (to avoid tunneling)
+		if(countdown==0){//Normal weak ball, bounce on bricks
+			// Find the brick with the deepest overlap (to avoid destroying multiple)
 			Brick hitBrick = null;
 			double maxOverlap = -1;
 
@@ -121,7 +131,7 @@ public class Ball extends Object {
 			}
 			hitBrick.update();
 		}
-		else{
+		else{//Unstopable except by map bound collision, wreck all in its path
 			for (Brick b : overlap) b.update();
 		} 
     }

@@ -24,7 +24,7 @@ class Brick extends Object{
 			{ null, load("Source/Assets/Brick/6-1.png") },
     };
 
-    private static Image load(String path) {
+    private static Image load(String path) {//A little helper method, just for this class, other don't load enough texture to justify it
         return new Image(Brick.class.getResource("/" + path).toExternalForm());
     }
 		
@@ -33,28 +33,29 @@ class Brick extends Object{
 		this.x=x;
 		this.y=y;
 		switch(type){
-			case 1:
+			case 1://The yellow one, break in 1 hit
 				this.hp=1;
 				break;
-			case 2:
+			case 2://Blue, break in 2
 				this.hp=2;
 				break;
-			case 3:
+			case 3://The metal one, take 5 hits
 				this.hp=5;
 				break;
-			case 4:
+			case 4://Drop paddle side pu
 				this.hp=1;
 				break;
-			case 5:
+			case 5://Drop bullet pu
 				this.hp=1;
 				break;	
-			case 6:
+			case 6://Drop buzzsaw pu
 				this.hp=1;
 				break;
 		}
 	}
 	public void update(){
 		this.hp--;
+		engine.score++;
 		if(hp<=0){
 			switch(this.type){
 				case 1:

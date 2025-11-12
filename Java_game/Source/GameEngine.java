@@ -24,7 +24,7 @@ public class GameEngine extends Application {
 	int level = 0;
 	int score=0;
 
-    int GAME_STATE = 0; // 0:menu, 1:ingame, 2:pause, 3:lose, 4:win
+    int GAME_STATE = 0; // 0:menu, 1:ingame, 2:pause, 3:lose, 4:pass/win
 
     // Game objects
     Paddle paddle = new Paddle();
@@ -57,14 +57,14 @@ public class GameEngine extends Application {
         this.stage = stage;
 
         // --- Load FXML ---
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Source/Layout.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Source/Layout.fxml"));//This define buttons and menus
         Parent root = loader.load();
         controller = loader.getController();
 
         // --- Stage setup ---
         stage.setTitle("Arkanoid Clone - JavaFX");
         stage.setFullScreen(true);
-        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);//Disable exiting full screen
         stage.setFullScreenExitHint("");
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -149,7 +149,7 @@ public class GameEngine extends Application {
 		resetGame();
     }
 
-    private void update() {
+    private void update() {//Call classes's update()
         if (GAME_STATE != 1) return;
 		if(bricks.isEmpty()){
 			onPass();
@@ -164,13 +164,13 @@ public class GameEngine extends Application {
     }
 
     private void render() {
-		if (GAME_STATE != 1) return;
+		if (GAME_STATE != 1) return;//The image is still there, but since notthing is updated, no need to rerender anyway
 		
 		// Clear background
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, screenW, screenH);
 		
-		// Side bars
+		// Side bars, make the game look nicer and serve as the canvas for Score and Level
 		gc.setFill(Color.rgb(80, 80, 80, 1));
 		gc.fillRect(175 * scale, 0, 5 * scale, 1080 * scale);
 		gc.fillRect((1920 - 180) * scale, 0, 5 * scale, 1080 * scale);
@@ -187,16 +187,16 @@ public class GameEngine extends Application {
 		ball.render(gc, scale);
 
 
-		// --- Draw score ---
+		// Stats
 		gc.setFill(Color.BLACK);
-		gc.setFont(new javafx.scene.text.Font(40 * scale)); // scaled font
-		gc.fillText("Score: ", 30 * scale, 60 * scale);
-		gc.fillText(""+score, 30 * scale, 100 * scale);
-		gc.fillText("Level: ", 1770 * scale, 60 * scale);
-		gc.fillText(""+(level+1), 1770 * scale, 100 * scale);		
+		gc.setFont(new javafx.scene.text.Font(40 * scale));
+		gc.fillText("Score: ", 20 * scale, 60 * scale);
+		gc.fillText(""+score, 20 * scale, 100 * scale);//Score, on left side bar
+		gc.fillText("Level: ", 1760 * scale, 60 * scale);
+		gc.fillText(""+(level+1), 1760 * scale, 100 * scale);//Level, on right side bar	
 	}
 	
-	//Working fine as is
+	//Read level from file and load onto bricks
     public void loadLevel(String resourcePath) {
         bricks.clear();
 
@@ -222,12 +222,13 @@ public class GameEngine extends Application {
             System.err.println("Failed to load level: " + e.getMessage());
         }
     }
-	public void resetGame(){
+	public void resetGame(){//Prepare for a new level
 		//Paddle
 		paddle.w=200;
         paddle.x = (SIM_W - paddle.w) / 2;
         paddle.y = SIM_H - 100;
 		//Ball
+		ball.resetCountdown();
         ball.x = SIM_W / 2 - Ball.SIZE / 2;
         ball.y = paddle.y-Ball.SIZE-1;
 		Random r= new Random(); //Random ball movement

@@ -10,9 +10,9 @@ public class Item extends Object {
 	
 	//Loading texture
 	static final Image[] texture = { 
-		new Image(Item.class.getResource("/Source/Assets/Item/0.png").toExternalForm()),
-		new Image(Item.class.getResource("/Source/Assets/Item/1.png").toExternalForm()),
-		new Image(Item.class.getResource("/Source/Assets/Item/2.png").toExternalForm()),
+		new Image(Item.class.getResource("/Source/Assets/Item/0.png").toExternalForm()),//Paddle extension
+		new Image(Item.class.getResource("/Source/Assets/Item/1.png").toExternalForm()),//Ammo belt
+		new Image(Item.class.getResource("/Source/Assets/Item/2.png").toExternalForm()),//Buzzsaw
 	};
 	
 	public Item(double x, double y, int type) {
@@ -24,7 +24,7 @@ public class Item extends Object {
 	public void update() {
 		this.y+=speed;
 		Paddle p = engine.paddle;
-		if (y + SIZE >= p.y && y < p.y && x + SIZE > p.x && x < p.x + p.w) {
+		if (y + SIZE >= p.y && y < p.y && x + SIZE > p.x && x < p.x + p.w) {//AABB collision
 			this.y=SIM_H;
 			switch(type){
 				case 0://Make paddle bigger

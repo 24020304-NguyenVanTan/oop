@@ -98,5 +98,5 @@
 /* Dark overlay while paused */
 #overlay {
     -fx-fill: black;
-    -fx-opacity: 0.5;
+    -fx-opacity: 0.7;
 }
