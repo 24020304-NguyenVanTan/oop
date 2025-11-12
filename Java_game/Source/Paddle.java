@@ -4,6 +4,7 @@ import javafx.scene.canvas.*;
 import javafx.scene.image.*;
 import javafx.scene.paint.*;
 import javafx.scene.input.*;
+import javafx.scene.media.*;
 public class Paddle extends Object{
 	int w=200;
 	double speed=10;
@@ -12,6 +13,8 @@ public class Paddle extends Object{
 	private int ammo = 0;
 	private int cooldown = 0;
 	
+	//Loading sound
+	public static final AudioClip sound = new AudioClip(Paddle.class.getResource("/Source/Assets/Sounds/Paddle shot.wav").toExternalForm());
 	public void addAmmo(int n) {
 		ammo=Math.max(0, ammo+n);
 	}
@@ -42,9 +45,10 @@ public class Paddle extends Object{
 		//Shooting
 		if(ammo>0){
 			if(engine.pressedKeys.contains(KeyCode.W) && cooldown==0) {
+					sound.play();
 					ammo--;
 					cooldown=60/5;
-					engine.bullets.add(new Bullet(this.x+this.w/2-Bullet.SIZE/2, y+16*3));
+					engine.bullets.add(new Bullet(this.x+this.w/2-Bullet.SIZE/2, y-32));
 			}
 			cooldown=Math.max(cooldown-1, 0);
 		}

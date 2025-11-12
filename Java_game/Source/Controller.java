@@ -9,8 +9,11 @@ import javafx.scene.shape.*;
 import java.net.*;
 import java.util.*;
 import javafx.application.*;
+import javafx.scene.media.*;
 
 public class Controller implements Initializable {
+	//Loading sound
+	public static final AudioClip sound = new AudioClip(Controller.class.getResource("/Source/Assets/Sounds/Click.wav").toExternalForm());
 
     @FXML public AnchorPane rootPane;
     @FXML public Pane scalePane;
@@ -67,6 +70,8 @@ public class Controller implements Initializable {
 
     @FXML
     public void onStartClicked() {
+		sound.play();
+		if(engine.ball.y>Object.SIM_H) engine.level=0;
 		engine.initGame();
         engine.GAME_STATE = 1;
 		mainMenu.setVisible(false);
@@ -79,11 +84,13 @@ public class Controller implements Initializable {
 
     @FXML
     public void onQuitClicked() {
+		sound.play();
         Platform.runLater(Platform::exit);
     }
 
     @FXML
     public void onContinueClicked() {
+		sound.play();
 		if(engine.GAME_STATE==4){
 			engine.initGame();
 		}
@@ -95,6 +102,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void onBackToMenuClicked() {
+		sound.play();
         engine.GAME_STATE = 0;
 		overlay.setVisible(false);
         pauseMenu.setVisible(false);
@@ -107,6 +115,7 @@ public class Controller implements Initializable {
 	
 	@FXML
     public void onRestartClicked() {
+		sound.play();
 		engine.level=0;
 		engine.initGame();
 		overlay.setVisible(false);

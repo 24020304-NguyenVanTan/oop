@@ -26,6 +26,7 @@ public class Ball extends Object {
     }
 	public void setCountdown(){//5 sec of power up
 		countdown=60*5;
+		speed=15;
 		SIZE=80;
 		x-=20;
 		y-=20;
@@ -36,6 +37,7 @@ public class Ball extends Object {
 			countdown--;
 			if(countdown==0){
 				SIZE=40;
+				speed=10;
 				x+=20;
 				y+=20;
 			}
@@ -54,6 +56,8 @@ public class Ball extends Object {
         if (this.y < 0) {
 			sound.play();
             this.dy *= -1;
+			x += dx*0.5;
+			y += dy*0.5;
             return;
         }
 
@@ -61,6 +65,8 @@ public class Ball extends Object {
         if (this.x < 0 || this.x + SIZE > SIM_W) {
 			sound.play();
             this.dx *= -1;
+			x += dx*0.5;
+			y += dy*0.5;
             return;
         }
 
@@ -72,6 +78,8 @@ public class Ball extends Object {
 			double angle = Math.toRadians(70) * Math.max(-1, Math.min(1, ((x + SIZE * 0.5) - (p.x + p.w * 0.5)) / (p.w * 0.5)));
 			dx = speed * Math.sin(angle);
 			dy = -speed * Math.cos(angle);
+			x += dx*0.5;
+			y += dy*0.5;
 		}
 		else if(y+SIZE<p.y) bounced=false;
 		
@@ -82,6 +90,7 @@ public class Ball extends Object {
 
         if (overlap.isEmpty()) return;
 		sound.play();
+		engine.score++;
 		if(countdown==0){
 			// Find the brick with the deepest overlap (to avoid tunneling)
 			Brick hitBrick = null;
@@ -110,7 +119,8 @@ public class Ball extends Object {
 				// Hit from top/bottom
 				dy *= -1;
 			}
-			engine.score++;
+			x += dx*0.5;
+			y += dy*0.5;
 			hitBrick.update();
 		}
 		else{
